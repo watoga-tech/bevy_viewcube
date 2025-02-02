@@ -68,7 +68,7 @@ pub fn generate_viewcube_simple_face(
             ..default()
         },
         Transform::from_matrix(Mat4::from_rotation_translation(
-            Quat::from_rotation_z(-crate::PI / 2.0),
+            Quat::from_rotation_z(-crate::PI / 2.0) * Quat::from_rotation_y(crate::PI / 2.0),
             Vec3::new(half, 0.0, 0.0),
         )),
         ViewcubeHit(CubePart::Right)
@@ -83,7 +83,7 @@ pub fn generate_viewcube_simple_face(
             ..default()
         },
         Transform::from_matrix(Mat4::from_rotation_translation(
-            Quat::from_rotation_z(crate::PI / 2.0),
+            Quat::from_rotation_z(crate::PI / 2.0) * Quat::from_rotation_y(-crate::PI / 2.0),
             Vec3::new(-half, 0.0, 0.0),
         )),
         ViewcubeHit(CubePart::Left)
@@ -143,7 +143,7 @@ pub fn generate_viewcube_simple_face(
             ..default()
         },
         Transform::from_matrix(Mat4::from_rotation_translation(
-            Quat::from_rotation_x(-crate::PI / 2.0),
+            Quat::from_rotation_x(-crate::PI / 2.0) * Quat::from_rotation_y(crate::PI),
             Vec3::new(0.0, 0.0, -half),
         )),
         ViewcubeHit(CubePart::Back)
