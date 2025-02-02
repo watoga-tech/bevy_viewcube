@@ -1,10 +1,7 @@
 use bevy::asset::AssetServer;
-
-use bevy::{
-    math::primitives::{Plane3d, Sphere},
-    prelude::*,
-    render::view::RenderLayers,
-};
+use bevy::pbr::MaterialMeshBundle;
+use bevy::prelude::*;
+use bevy::render::view::RenderLayers;
 use bevy_mod_picking::prelude::*;
 
 use crate::generate_viewcube_face;
@@ -51,7 +48,7 @@ pub fn setup(
 
 pub fn generate_viewcube_simple_face(
     size: f32,
-    builder: &mut ChildBuilder,
+    commands: &mut ChildBuilder,
     meshes: &mut Assets<Mesh>,
     materials: &mut Assets<StandardMaterial>,
     asset_server: &AssetServer,
@@ -59,7 +56,7 @@ pub fn generate_viewcube_simple_face(
     let plane = Plane3d::default().mesh().size(size, size);
     let half = 0.4f32;
     // Right (+X)
-    builder.spawn(generate_viewcube_face!(
+    commands.spawn(generate_viewcube_face!(
         meshes,
         materials,
         plane,
@@ -74,7 +71,7 @@ pub fn generate_viewcube_simple_face(
         ViewcubeHit(CubePart::Right)
     ));
     // Left (-X)
-    builder.spawn(generate_viewcube_face!(
+    commands.spawn(generate_viewcube_face!(
         meshes,
         materials,
         plane,
@@ -89,7 +86,7 @@ pub fn generate_viewcube_simple_face(
         ViewcubeHit(CubePart::Left)
     ));
     // Top (+Y)
-    builder.spawn(generate_viewcube_face!(
+    commands.spawn(generate_viewcube_face!(
         meshes,
         materials,
         plane,
@@ -104,7 +101,7 @@ pub fn generate_viewcube_simple_face(
         ViewcubeHit(CubePart::Top)
     ));
     // Bottom (-Y)
-    builder.spawn(generate_viewcube_face!(
+    commands.spawn(generate_viewcube_face!(
         meshes,
         materials,
         plane,
@@ -119,7 +116,7 @@ pub fn generate_viewcube_simple_face(
         ViewcubeHit(CubePart::Bottom)
     ));
     // Front (+Z)
-    builder.spawn(generate_viewcube_face!(
+    commands.spawn(generate_viewcube_face!(
         meshes,
         materials,
         plane,
@@ -134,7 +131,7 @@ pub fn generate_viewcube_simple_face(
         ViewcubeHit(CubePart::Front)
     ));
     // Back (-Z)
-    builder.spawn(generate_viewcube_face!(
+    commands.spawn(generate_viewcube_face!(
         meshes,
         materials,
         plane,

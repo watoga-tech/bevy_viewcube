@@ -1,3 +1,5 @@
+// not used for rockhound software so didn't want to update it to the newer bevy version
+
 use bevy::{
     math::primitives::Sphere,
     prelude::*,

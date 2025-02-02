@@ -1,28 +1,19 @@
+//mod powerful_viewcube;
 mod simple_viewcube;
-mod powerful_viewcube;
 use bevy::{
-    app::{
-        Plugin, Startup, Update
-    },
+    app::{Plugin, Startup, Update},
     ecs::{
         component::Component,
         entity::Entity,
         query::With,
         schedule::IntoSystemConfigs,
-        system::{
-            Commands,
-            ParamSet,
-            Query
-        }
+        system::{Commands, ParamSet, Query},
     },
-    math::{
-        UVec2,
-        Vec3
-    },
+    math::{UVec2, Vec3},
     prelude::default,
     render::camera::Camera,
     transform::components::Transform,
-    window::Window
+    window::Window,
 };
 use bevy_panorbit_camera::PanOrbitCamera;
 
@@ -31,14 +22,34 @@ use crate::{PI_2, PI_4, PI_4_3};
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub(crate) enum CubePart {
     // Face
-    Front, Back, Left, Right, Top, Bottom,
+    Front,
+    Back,
+    Left,
+    Right,
+    Top,
+    Bottom,
     // Edge
-    FrontTop, FrontBottom, BackTop, BackBottom,
-    LeftTop, LeftBottom, RightTop, RightBottom,
-    FrontLeft, FrontRight, BackLeft, BackRight,
+    FrontTop,
+    FrontBottom,
+    BackTop,
+    BackBottom,
+    LeftTop,
+    LeftBottom,
+    RightTop,
+    RightBottom,
+    FrontLeft,
+    FrontRight,
+    BackLeft,
+    BackRight,
     // Corner
-    FrontLeftTop, FrontLeftBottom, FrontRightTop, FrontRightBottom,
-    BackLeftTop, BackLeftBottom, BackRightTop, BackRightBottom,
+    FrontLeftTop,
+    FrontLeftBottom,
+    FrontRightTop,
+    FrontRightBottom,
+    BackLeftTop,
+    BackLeftBottom,
+    BackRightTop,
+    BackRightBottom,
 }
 
 #[derive(Default)]
@@ -48,16 +59,10 @@ pub struct BevyViewCubePlugin {
 
 impl Plugin for BevyViewCubePlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
-        let setup = if self.use_powerful_viewcube {
-            powerful_viewcube::setup
-        } else {
-            simple_viewcube::setup
-        };
-        app
-        .add_systems(Startup, (setup,crate::create_small_view).chain())
-        .add_systems(Update, update_view)
-        .add_systems(Update, viewcube_hit)
-        ;
+        let setup = simple_viewcube::setup;
+        app.add_systems(Startup, (setup, crate::create_small_view).chain())
+            .add_systems(Update, update_view)
+            .add_systems(Update, viewcube_hit);
     }
 }
 
@@ -70,17 +75,19 @@ pub(crate) struct ViewcubeHit(pub CubePart);
 #[macro_export]
 macro_rules! generate_viewcube_face {
     ($meshes:ident, $materials: ident, $part: expr, $color: expr, $transform: expr, $component: expr) => {
-        (MaterialMeshBundle {
-            mesh: $meshes.add($part.clone()),
-            material: $materials.add(StandardMaterial::from($color)),
-            transform: $transform,
-            ..Default::default()
-        },
-        RenderLayers::layer(13),
-        PickableBundle::default(),
-        On::<Pointer<Click>>::commands_mut(|event, commands| {
-            commands.entity(event.target).insert($component);
-        }))
+        (
+            MaterialMeshBundle {
+                mesh: $meshes.add($part.clone()),
+                material: $materials.add(StandardMaterial::from($color)),
+                transform: $transform,
+                ..Default::default()
+            },
+            RenderLayers::layer(13),
+            PickableBundle::default(),
+            On::<Pointer<Click>>::commands_mut(|event, commands| {
+                commands.entity(event.target).insert($component);
+            }),
+        )
     };
 }
 
@@ -90,14 +97,12 @@ pub(crate) fn update_view(
     mut transform_query: ParamSet<(
         Query<&mut Transform, With<ViewcubeCenter>>,
         Query<&Transform, (With<PanOrbitCamera>, With<crate::ViewcubeBinding>)>,
-    )>
+    )>,
 ) {
     let window: &Window = windows.single();
     let mut cam = camera.single_mut();
     cam.viewport = Some(bevy::render::camera::Viewport {
-        physical_position: UVec2::new(
-            0, (window.physical_height() as f32 * 0.6) as u32
-        ),
+        physical_position: UVec2::new(0, (window.physical_height() as f32 * 0.6) as u32),
         physical_size: UVec2::new(
             (window.physical_width() as f32 * 0.3) as u32,
             (window.physical_height() as f32 * 0.4) as u32,
@@ -116,7 +121,6 @@ pub(crate) fn update_view(
     let mut trident = transform_query.p0();
     let mut trident_transform = trident.single_mut();
     trident_transform.rotation = transform.rotation.inverse();
-
 }
 
 pub(crate) fn viewcube_hit(
@@ -162,6 +166,6 @@ pub(crate) fn viewcube_hit(
     let mut orbit_camera = camera.single_mut();
 
     orbit_camera.target_focus = Vec3::ZERO;
-    orbit_camera.target_alpha = alpha;
-    orbit_camera.target_beta = beta;
+    orbit_camera.target_yaw = alpha;
+    orbit_camera.target_pitch = beta;
 }
