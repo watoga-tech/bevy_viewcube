@@ -165,7 +165,7 @@ pub(crate) fn viewcube_hit(
 
     let mut orbit_camera = camera.single_mut();
 
-    orbit_camera.target_focus = Vec3::ZERO;
+    // Keep the current focus point instead of resetting to origin
     orbit_camera.target_yaw = alpha;
     orbit_camera.target_pitch = beta;
 }
