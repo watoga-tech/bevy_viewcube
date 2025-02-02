@@ -1,9 +1,6 @@
 use bevy::prelude::*;
-use bevy_panorbit_camera::{
-    PanOrbitCamera,
-    PanOrbitCameraPlugin
-};
 use bevy_mod_picking::prelude::*;
+use bevy_panorbit_camera::{PanOrbitCamera, PanOrbitCameraPlugin};
 
 use bevy_viewcube::prelude::*;
 
@@ -14,7 +11,7 @@ fn main() {
         .add_plugins(DefaultPickingPlugins)
         // bevy_ui debug bug(https://github.com/aevyrie/bevy_mod_picking/issues/317), use default to disable debug ui
         .insert_resource(DebugPickingMode::Normal)
-        .add_plugins(BevyViewCubePlugin{use_powerful_viewcube:true})
+        .add_plugins(BevyViewCubePlugin::default())
         .add_systems(Startup, setup)
         .run();
 }
@@ -22,11 +19,11 @@ fn main() {
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>
+    mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     commands.spawn((
         Camera3dBundle {
-                        transform: Transform::from_xyz(0.0, 0.0, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
+            transform: Transform::from_xyz(0.0, 0.0, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         },
         PanOrbitCamera {
