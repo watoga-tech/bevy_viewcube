@@ -1,7 +1,7 @@
 //mod powerful_viewcube;
 mod simple_viewcube;
 use bevy::{
-    app::{Plugin, Startup, Update},
+    app::{App, Plugin, Startup, Update},
     ecs::{
         component::Component,
         entity::Entity,
@@ -58,7 +58,7 @@ pub struct BevyViewCubePlugin {
 }
 
 impl Plugin for BevyViewCubePlugin {
-    fn build(&self, app: &mut bevy::prelude::App) {
+    fn build(&self, app: &mut App) {
         let setup = simple_viewcube::setup;
         app.add_systems(Startup, (setup, crate::create_small_view).chain())
             .add_systems(Update, update_view)
