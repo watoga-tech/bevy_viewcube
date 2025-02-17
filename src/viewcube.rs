@@ -102,10 +102,10 @@ pub(crate) fn update_view(
     let window: &Window = windows.single();
     let mut cam = camera.single_mut();
     cam.viewport = Some(bevy::render::camera::Viewport {
-        physical_position: UVec2::new(0, (window.physical_height() as f32 * 0.6) as u32),
+        physical_position: UVec2::new(0, (window.physical_height() as f32 * 0.7) as u32),
         physical_size: UVec2::new(
-            (window.physical_width() as f32 * 0.3) as u32,
-            (window.physical_height() as f32 * 0.4) as u32,
+            (window.physical_width() as f32 * 0.2) as u32,
+            (window.physical_height() as f32 * 0.3) as u32,
         ),
         ..default()
     });

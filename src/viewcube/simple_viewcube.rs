@@ -54,7 +54,7 @@ pub fn generate_viewcube_simple_face(
     asset_server: &AssetServer,
 ) {
     let plane = Plane3d::default().mesh().size(size, size);
-    let half = 0.4f32;
+    let half = size / 2.0;
     // Right (+X)
     commands.spawn(generate_viewcube_face!(
         meshes,
