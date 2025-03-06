@@ -16,6 +16,10 @@ use bevy::{
     window::Window,
 };
 use bevy_panorbit_camera::PanOrbitCamera;
+// use bevy_picking::prelude::Pickable;
+// use bevy_picking::mesh_picking::RayCastPickable;
+// use bevy_picking::prelude::*;
+// use bevy_picking::selection::On;
 
 use crate::{PI_2, PI_4, PI_4_3};
 
@@ -76,20 +80,23 @@ pub(crate) struct ViewcubeHit(pub CubePart);
 macro_rules! generate_viewcube_face {
     ($meshes:ident, $materials: ident, $part: expr, $color: expr, $transform: expr, $component: expr) => {
         (
-            MaterialMeshBundle {
-                mesh: $meshes.add($part.clone()),
-                material: $materials.add(StandardMaterial::from($color)),
-                transform: $transform,
-                ..Default::default()
-            },
+            Mesh3d($meshes.add($part.clone())),
+            MeshMaterial3d($materials.add(StandardMaterial::from($color))),
+            $transform,
             RenderLayers::layer(13),
-            PickableBundle::default(),
-            On::<Pointer<Click>>::commands_mut(|event, commands| {
-                commands.entity(event.target).insert($component);
-            }),
+            // RaycastPickable,
         )
     };
 }
+
+// Then add this function
+// fn debug_picking(pointers: Query<&bevy_picking::prelude::Pointer<bevy_picking::prelude::Move>>) {
+//     // println!("pointers: {:?}", pointers);
+//     // println!("number of pointers: {:?}", pointers.iter().count());
+//     for pointer in &pointers {
+//         println!("Pointer detected over: {:?}", pointer.target);
+//     }
+// }
 
 pub(crate) fn update_view(
     windows: Query<&Window>,

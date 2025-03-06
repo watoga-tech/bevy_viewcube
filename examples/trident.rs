@@ -27,89 +27,70 @@ fn setup(
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     commands.spawn((
-        Camera3dBundle {
-            transform: Transform::from_xyz(0.0, 0.0, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
-            camera: Camera { ..default() },
+        Camera3d {
+            // clear_color: ClearColorConfig::Default,
             ..default()
         },
+        Camera { ..default() },
+        Transform::from_xyz(0.0, 0.0, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
+        GlobalTransform::default(),
         PanOrbitCamera::default(),
     ));
-    commands.spawn(DirectionalLightBundle {
-        ..Default::default()
-    });
-    commands.spawn(DirectionalLightBundle {
-        transform: Transform::from_rotation(Quat::from_rotation_x(std::f32::consts::PI)),
-        ..Default::default()
-    });
 
-    // x
-    commands.spawn(MaterialMeshBundle {
-        mesh: meshes.add(Mesh::from(Sphere { radius: 0.75 })),
-        material: materials.add(StandardMaterial::from(Color::srgb(1.0, 0.0, 0.0))),
-        transform: Transform::from_xyz(5.0, 0.0, 0.0),
-        ..Default::default()
-    });
-    // y
-    commands.spawn(MaterialMeshBundle {
-        mesh: meshes.add(Mesh::from(Sphere { radius: 0.75 })),
-        material: materials.add(StandardMaterial::from(Color::srgb(0.0, 1.0, 0.0))),
-        transform: Transform::from_xyz(0.0, 5.0, 0.0),
-        ..Default::default()
-    });
-    // z
-    commands.spawn(MaterialMeshBundle {
-        mesh: meshes.add(Mesh::from(Sphere { radius: 0.75 })),
-        material: materials.add(StandardMaterial::from(Color::srgb(0.0, 0.0, 1.0))),
-        transform: Transform::from_xyz(0.0, 0.0, 5.0),
-        ..Default::default()
-    });
-
-    // Trident
-    commands.spawn((MaterialMeshBundle {
-        mesh: meshes.add(BevyTridentAxis::default()),
-        material: materials.add(StandardMaterial::default()),
-        ..Default::default()
-    },));
     commands.spawn((
-        MaterialMeshBundle {
-            mesh: meshes.add(BevyTridentAxis::default()),
-            material: materials.add(StandardMaterial::default()),
-            ..Default::default()
-        },
-        RenderLayers::layer(13),
-        Trident,
+        DirectionalLight::default(),
+        Transform::default(),
+        GlobalTransform::default(),
+    ));
+    commands.spawn((
+        DirectionalLight::default(),
+        Transform::from_rotation(Quat::from_rotation_x(std::f32::consts::PI)),
+        GlobalTransform::default(),
     ));
 
     commands.spawn((
-        Camera3dBundle {
-            camera: Camera {
-                order: 1,
-                clear_color: ClearColorConfig::None,
-                ..Default::default()
-            },
-            camera_3d: Camera3d {
-                depth_load_op: bevy::core_pipeline::core_3d::Camera3dDepthLoadOp::Clear(0.),
-                ..default()
-            },
-            transform: Transform::from_xyz(0.0, 0.0, 3.0).looking_at(Vec3::ZERO, Vec3::Y),
+        Mesh3d(meshes.add(Mesh::from(Sphere { radius: 0.75 }))),
+        MeshMaterial3d(materials.add(StandardMaterial::from(Color::srgb(1.0, 0.0, 0.0)))),
+        Transform::from_xyz(5.0, 0.0, 0.0),
+        GlobalTransform::default(),
+    ));
+
+    commands.spawn((
+        Mesh3d(meshes.add(Mesh::from(Sphere { radius: 0.75 }))),
+        MeshMaterial3d(materials.add(StandardMaterial::from(Color::srgb(0.0, 1.0, 0.0)))),
+        Transform::from_xyz(0.0, 5.0, 0.0),
+        GlobalTransform::default(),
+    ));
+
+    commands.spawn((
+        Mesh3d(meshes.add(Mesh::from(Sphere { radius: 0.75 }))),
+        MeshMaterial3d(materials.add(StandardMaterial::from(Color::srgb(0.0, 0.0, 1.0)))),
+        Transform::from_xyz(0.0, 0.0, 5.0),
+        GlobalTransform::default(),
+    ));
+
+    commands.spawn((
+        Camera3d {
+            // clear_color: ClearColorConfig::None,
+            depth_load_op: bevy::core_pipeline::core_3d::Camera3dDepthLoadOp::Clear(0.),
             ..default()
         },
+        Camera {
+            order: 1,
+            ..Default::default()
+        },
+        Transform::from_xyz(0.0, 0.0, 3.0).looking_at(Vec3::ZERO, Vec3::Y),
+        GlobalTransform::default(),
         RenderLayers::layer(13),
         SmallView,
     ));
 
     commands.spawn((
-        DirectionalLightBundle {
-            ..Default::default()
-        },
-        RenderLayers::layer(13),
-    ));
-    commands.spawn((
-        DirectionalLightBundle {
-            transform: Transform::from_rotation(Quat::from_rotation_x(std::f32::consts::PI)),
-            ..Default::default()
-        },
-        RenderLayers::layer(13),
+        Mesh3d(meshes.add(BevyTridentAxis::default())),
+        MeshMaterial3d(materials.add(StandardMaterial::default())),
+        Transform::default(),
+        GlobalTransform::default(),
+        Trident,
     ));
 }
 

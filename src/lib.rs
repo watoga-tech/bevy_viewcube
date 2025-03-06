@@ -24,32 +24,29 @@ use bevy::{
 pub(crate) fn create_small_view(mut commands: bevy::ecs::system::Commands) {
     commands
         .spawn((
-            Camera3dBundle {
-                camera: Camera {
-                    order: 1,
-                    clear_color: ClearColorConfig::None,
-                    viewport: Some(bevy::render::camera::Viewport {
-                        physical_size: UVec2::new(600, 1200),
-                        ..default()
-                    }),
-                    ..Default::default()
-                },
-                camera_3d: Camera3d {
-                    depth_load_op: bevy::core_pipeline::core_3d::Camera3dDepthLoadOp::Clear(0.),
-                    ..default()
-                },
-                transform: Transform::from_xyz(0.6, 0.6, 4.0)
-                    .looking_at(Vec3::new(0.6, 0.6, 0.6), Vec3::Y),
+            Camera3d {
+                depth_load_op: bevy::core_pipeline::core_3d::Camera3dDepthLoadOp::Clear(0.),
                 ..default()
             },
+            Camera {
+                order: 1,
+                clear_color: ClearColorConfig::None,
+                viewport: Some(bevy::render::camera::Viewport {
+                    physical_size: UVec2::new(600, 1200),
+                    ..default()
+                }),
+                ..Default::default()
+            },
+            Transform::from_xyz(0.6, 0.6, 4.0).looking_at(Vec3::new(0.6, 0.6, 0.6), Vec3::Y),
             RenderLayers::layer(13),
             SmallView,
+            // bevy_picking::prelude::RaycastPickCamera::default(),
+            bevy_picking::mesh_picking::RayCastPickable::default(),
         ))
         .with_children(|builder| {
             builder.spawn((
-                DirectionalLightBundle {
-                    ..Default::default()
-                },
+                DirectionalLight::default(),
+                Transform::default(),
                 RenderLayers::layer(13),
             ));
         });
